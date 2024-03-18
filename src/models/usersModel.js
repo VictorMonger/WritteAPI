@@ -42,6 +42,20 @@ class UsersModel {
       throw new Error(error);
     }
   }
+
+  async signIn(email, password) {
+    try {
+      const user = await this.connection("users")
+        .select("*")
+        .where("email", email)
+        .andWhere("password", password)
+        .first();
+        
+      return user;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }
 
 module.exports = UsersModel;
