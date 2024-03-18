@@ -1,8 +1,10 @@
+const { createUserToken } = require("../lib/auth");
+
 class UsersController {
   constructor(usersModel) {
     this.usersModel = usersModel;
   }
-  
+
   async signUp(request, response) {
     try {
       const { userName, firstName, lastName, email, password } = request.body;
@@ -43,6 +45,27 @@ class UsersController {
     } catch (error) {
       return response.status(500).json({ error: "Internal Server Error" });
     }
+  }
+
+  async signIn(request, response) {
+    const { cpf, password } = request.body;
+
+    const user = await this.usersModel.signIn(cpf, password);
+
+    if (!user) {
+      return response.status(404).json({ msg: "User not found" });
+    }
+
+    delete user.password;
+
+    const token = createUserToken(user);
+
+    return response.status(200).json({
+      data: {
+        user,
+        token,
+      },
+    });
   }
 }
 
