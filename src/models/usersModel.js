@@ -43,14 +43,15 @@ class UsersModel {
     }
   }
 
-  async signIn(email, password) {
+  async signIn(userName, password) {
     try {
       const user = await this.connection("users")
         .select("*")
-        .where("email", email)
+        .where("userName", userName)
+        .orWhere("email", userName)
         .andWhere("password", password)
         .first();
-        
+
       return user;
     } catch (error) {
       throw new Error(error);
