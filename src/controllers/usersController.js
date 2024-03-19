@@ -20,7 +20,7 @@ class UsersController {
       const userNameExist = await this.usersModel.userNameExists(userName);
 
       if (userNameExist) {
-        return response.status(400).json({ error: "Username already in use" });
+        return response.status(400).json({ error: "username already in use" });
       }
 
       const userEmailExist = await this.usersModel.emailExists(email);
@@ -39,33 +39,47 @@ class UsersController {
         password,
       };
 
-      const userSignUp = await this.usersModel.signUp(user);
+      await this.usersModel.signUp(user);
 
-      return response.status(201).json(userSignUp);
+      return response.status(201).json({ msg: "successfully registered" });
     } catch (error) {
       return response.status(500).json({ error: "Internal Server Error" });
     }
   }
 
   async signIn(request, response) {
-    const { cpf, password } = request.body;
+    try {
+      const { userName, password } = request.body;
 
-    const user = await this.usersModel.signIn(cpf, password);
+      if (!userName || !password) {
+        return response
+          .status(400)
+          .json({ error: "Insert all required fields" });
+      }
 
-    if (!user) {
-      return response.status(404).json({ msg: "User not found" });
+      const user = await this.usersModel.signIn(userName, password);
+
+      if (!user) {
+        return response.status(404).json({ msg: "User not found" });
+      }
+
+      delete user.password;
+
+      const token = createUserToken(user);
+
+      return response.status(200).json({
+        data: {
+          user,
+          token,
+        },
+      });
+    } catch (error) {
+      return response.status(500).json({ error: "Internal Server Error" });
     }
+  }
 
-    delete user.password;
-
-    const token = createUserToken(user);
-
-    return response.status(200).json({
-      data: {
-        user,
-        token,
-      },
-    });
+  async createPosts(request, response) {
+    
   }
 }
 
