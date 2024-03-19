@@ -9,6 +9,7 @@ const app = express();
 app.use(express.json());
 
 const connection = require("./database/connection");
+const { verifyToken } = require("./lib/auth");
 
 const UsersModel = require("./models/usersModel");
 const UsersController = require("./controllers/usersController");
@@ -20,6 +21,8 @@ const usersRouter = new UsersRouter(usersController);
 
 app.use("/users", usersRouter.getRoutes());
 
+app.use("/users/private", verifyToken)
+
 app.listen(PORT, () => {
-  console.log(`Server listening port ${PORT}`);
+  console.log(`Server listening on port ${PORT}`);
 });
