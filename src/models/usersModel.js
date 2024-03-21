@@ -57,6 +57,10 @@ class UsersModel {
       throw new Error(error);
     }
   }
+
+  async createPosts(request, response) {
+    
+  }
 }
 
 module.exports = UsersModel;
