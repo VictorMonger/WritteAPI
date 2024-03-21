@@ -77,10 +77,6 @@ class UsersController {
       return response.status(500).json({ error: "Internal Server Error" });
     }
   }
-
-  async createPosts(request, response) {
-    
-  }
 }
 
 module.exports = UsersController;
