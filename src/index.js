@@ -19,9 +19,17 @@ const usersModel = new UsersModel(connection);
 const usersController = new UsersController(usersModel);
 const usersRouter = new UsersRouter(usersController);
 
+const PostsModel = require("./models/postsModels");
+const PostsController = require("./controllers/postsController");
+const { PostsRouter } = require("./routes/");
+
+const postsModel = new PostsModel(connection);
+const postController = new PostsController(postsModel);
+const postsRouter = new PostsRouter(postController);
+
 app.use("/users", usersRouter.getRoutes());
 
-app.use("/users/private", verifyToken)
+app.use("/posts/", verifyToken, postsRouter.getRoutes())
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
