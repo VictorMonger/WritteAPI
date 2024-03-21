@@ -13,10 +13,6 @@ class UsersRouter {
     this.users.post("/", (request, response) => {
       this.usersController.signIn(request, response);
     });
-
-    this.users.post("/private/post", (request, response) => {
-      this.usersController.createPosts(request, response);
-    });
   }
 
   getRoutes() {
