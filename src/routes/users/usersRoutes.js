@@ -6,12 +6,24 @@ class UsersRouter {
 
     this.usersController = usersController;
 
-    this.users.post("/", (request, response) => {
+    this.users.post("/signUp", (request, response) => {
       this.usersController.signUp(request, response);
     });
 
-    this.users.post("/", (request, response) => {
+    this.users.post("/signIn", (request, response) => {
       this.usersController.signIn(request, response);
+    });
+
+    this.users.get("/private", (request, response) => {
+      this.usersController.getAll(request, response);
+    });
+
+    this.users.get("/private/:userId", (request, response) => {
+      this.usersController.getFollowingByUser(request, response);
+    });
+
+    this.users.get("/private/:userId", (request, response) => {
+      this.usersController.getUserFollowers(request, response);
     });
   }
 
