@@ -1,0 +1,41 @@
+class FollowersController {
+  constructor(followersModel) {
+    this.followersModel = followersModel;
+  }
+
+  async followUser(request, response) {
+    try {
+      const { followerId } = request.params;
+      const { followedId } = request.body;
+
+      await this.followersModel.followUser(followerId, followedId);
+
+      return response
+        .status(200)
+        .json({ message: "User followed successfully." });
+    } catch (error) {
+      console.error(error);
+      return response.status(500).json({ error: "Failed to follow user." });
+    }
+  }
+
+  async unfollowUser(request, response) {
+    try {
+      const { followerId } = request.params;
+      const { followedId } = request.body;
+
+      await this.followersModel.unfollowUser(followerId, followedId);
+
+      return response
+        .status(200)
+        .json({ message: "User unfollowed successfully." });
+    } catch (error) {
+      console.error(error);
+      return response.status(500).json({ error: "Failed to unfollow user." });
+    }
+  }
+
+  
+}
+
+module.exports = FollowersController;
