@@ -77,6 +77,44 @@ class UsersController {
       return response.status(500).json({ error: "Internal Server Error" });
     }
   }
+
+  async getAll(request, response) {
+    try {
+      const users = await this.usersModel.getAll();
+
+      return response.status(200).json(users);
+    } catch (error) {
+      return response.status(500).json({ error: "Failed to get all users." });
+    }
+  }
+
+  async getFollowingByUser(request, response) {
+    try {
+      const { userId } = request.params;
+
+      const followedUsers = await this.usersModel.getFollowingByUser(userId);
+
+      return response.status(200).json(followedUsers);
+    } catch (error) {
+      return response
+        .status(500)
+        .json({ error: "Failed to list following users." });
+    }
+  }
+
+  async getUserFollowers(request, response) {
+    try {
+      const { userId } = request.params;
+
+      const userFollowers = await this.usersModel.getUserFollowers(userId);
+
+      return response.status(200).json(userFollowers);
+    } catch (error) {
+      return response
+        .status(500)
+        .json({ error: "Failed to list following users." });
+    }
+  }
 }
 
 module.exports = UsersController;
