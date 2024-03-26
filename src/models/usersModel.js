@@ -57,6 +57,36 @@ class UsersModel {
       throw new Error(error);
     }
   }
+
+  async getAll() {
+    try {
+      return await this.connection("users").select("*");
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getFollowingByUser(userId) {
+    try {
+      return await this.connection("followers")
+        .join("users", "followers.followedId", "users.id")
+        .where("followers.followedId", userId)
+        .select("users.*");
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getUserFollowers(userId) {
+    try {
+      return await this.connection("followers")
+        .join("users", "followers.followerId", "users.id")
+        .where("followers.followerId", userId)
+        .select("users.*");
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }
 
 module.exports = UsersModel;
