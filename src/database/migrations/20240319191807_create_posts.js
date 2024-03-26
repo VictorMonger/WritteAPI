@@ -9,8 +9,8 @@ exports.up = function(knex) {
     table.text("content").notNullable();
     table.integer("likes").defaultTo(0);
 
-    table.string("author");
-    table.foreign("author").references("users.userName").onDelete("CASCADE");
+    table.uuid("userId").defaultTo(knex.fn.uuid());
+    table.foreign("userId").references("users.id").onDelete("CASCADE");
   });
 };
 
