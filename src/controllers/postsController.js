@@ -69,11 +69,13 @@ class PostsController {
       const tokenUserObject = JSON.parse(user);
       const { id } = tokenUserObject;
 
-      const likePost = await this.postsModel.likePost(postId, id);
+      const likedPost = await this.postsModel.postAlreadyLiked(postId, id);
 
-      if (!likePost) {
+      if (likedPost) {
         return response.status(400).json({ message: "Post already liked." });
       }
+
+      await this.postsModel.likePost(postId, id)
 
       return response.status(200).json({ message: "Post liked successfully." });
     } catch (error) {
@@ -91,7 +93,9 @@ class PostsController {
 
       await this.postsModel.unlikePost(postId, id);
 
-      return res.status(200).json({ message: "Post unliked successfully." });
+      return response
+        .status(200)
+        .json({ message: "Post unliked successfully." });
     } catch (error) {
       return response.status(500).json({ error: "Failed to unlike Post." });
     }
