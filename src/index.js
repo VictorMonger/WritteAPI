@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 
 const connection = require("./database/connection");
-const { verifyToken } = require("./lib/auth");
+const validateToken = require("./middleware/authMiddleware");
 
 const UsersModel = require("./models/usersModel");
 const UsersController = require("./controllers/usersController");
@@ -35,13 +35,13 @@ const followersModel = new FollowersModel(connection);
 const followersController = new FollowersController(followersModel);
 const followersRouter = new FollowersRouter(followersController);
 
-app.use("/users", usersRouter.getRoutes());
+app.use("/public/users", usersRouter.getRoutes());
 
-app.use("/users/private", verifyToken, usersRouter.getRoutes());
+app.use("/users", validateToken, usersRouter.getPrivateRoutes());
 
-app.use("/posts/", verifyToken, postsRouter.getRoutes())
+app.use("/posts", validateToken, postsRouter.getRoutes());
 
-app.use("/follows/", verifyToken, followersRouter.getRoutes())
+app.use("/follows/", validateToken, followersRouter.getRoutes());
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
