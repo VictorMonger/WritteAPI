@@ -18,11 +18,11 @@ class PostsRouter {
       this.postsController.getPostInfo(request, response);
     });
 
-    this.posts.post("/:postId/like", (request, response) => {
+    this.posts.post("/like/:postId", (request, response) => {
       this.postsController.likePost(request, response);
     });
 
-    this.posts.delete("/:postId/unlike", (request, response) => {
+    this.posts.delete("/unlike/:postId", (request, response) => {
       this.postsController.unlikePost(request, response);
     });
   }
