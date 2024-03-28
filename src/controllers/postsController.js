@@ -6,7 +6,10 @@ class PostsController {
   async createPosts(request, response) {
     try {
       const { content } = request.body;
-      const { userId } = request.params;
+      const { user } = request.headers;
+
+      const tokenUserObject = JSON.parse(user);
+      const { id } = tokenUserObject;
 
       if (!content) {
         return response
@@ -14,7 +17,7 @@ class PostsController {
           .json({ error: "Write something to Writte" });
       }
 
-      const post = await this.postsModel.createPosts(userId, content);
+      const post = await this.postsModel.createPosts(id, content);
 
       return response.status(201).json(post);
     } catch (error) {
@@ -25,9 +28,12 @@ class PostsController {
   async deletePosts(request, response) {
     try {
       const { postId } = request.params;
-      const { userId } = request.body;
+      const { user } = request.headers;
 
-      await this.postsModel.deletePosts(postId, userId);
+      const tokenUserObject = JSON.parse(user);
+      const { id } = tokenUserObject;
+
+      await this.postsModel.deletePosts(postId, id);
 
       return response
         .status(200)
@@ -58,9 +64,12 @@ class PostsController {
   async likePost(request, response) {
     try {
       const { postId } = request.params;
-      const { userId } = request.body;
+      const { user } = request.headers;
 
-      const likePost = await this.postsModel.likePost(postId, userId);
+      const tokenUserObject = JSON.parse(user);
+      const { id } = tokenUserObject;
+
+      const likePost = await this.postsModel.likePost(postId, id);
 
       if (!likePost) {
         return response.status(400).json({ message: "Post already liked." });
@@ -68,24 +77,23 @@ class PostsController {
 
       return response.status(200).json({ message: "Post liked successfully." });
     } catch (error) {
-      return response
-        .status(500)
-        .json({ error: "Failed to like Post." });
+      return response.status(500).json({ error: "Failed to like Post." });
     }
   }
 
   async unlikePost(request, response) {
     try {
       const { postId } = request.params;
-      const { userId } = request.body;
+      const { user } = request.headers;
 
-      await this.postsModel.unlikePost(postId, userId);
+      const tokenUserObject = JSON.parse(user);
+      const { id } = tokenUserObject;
+
+      await this.postsModel.unlikePost(postId, id);
 
       return res.status(200).json({ message: "Post unliked successfully." });
     } catch (error) {
-      return response
-        .status(500)
-        .json({ error: "Failed to unlike Post." });
+      return response.status(500).json({ error: "Failed to unlike Post." });
     }
   }
 }
