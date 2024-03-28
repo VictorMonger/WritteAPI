@@ -7,11 +7,11 @@ class PostsRouter {
     this.postsController = postsController;
 
     this.posts.post("/", (request, response) => {
-      this.postsController.createPost(request, response);
+      this.postsController.createPosts(request, response);
     });
 
     this.posts.delete("/:postId", (request, response) => {
-      this.postsController.deletePost(request, response);
+      this.postsController.deletePosts(request, response);
     });
 
     this.posts.get("/:postId", (request, response) => {
