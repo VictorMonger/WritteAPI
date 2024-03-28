@@ -11,7 +11,7 @@ const createUserToken = (user) => {
 
 const verifyToken = (token) => {
   const payload = jwt.verify(token, JWT_SECRET);
-
+  
   return payload;
 };
 
