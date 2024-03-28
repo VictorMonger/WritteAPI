@@ -3,6 +3,7 @@ const express = require("express");
 class UsersRouter {
   constructor(usersController) {
     this.users = express.Router();
+    this.privateUsers = express.Router()
 
     this.usersController = usersController;
 
@@ -14,21 +15,25 @@ class UsersRouter {
       this.usersController.signIn(request, response);
     });
 
-    this.users.get("/private", (request, response) => {
+    this.privateUsers.get("/", (request, response) => {
       this.usersController.getAll(request, response);
     });
 
-    this.users.get("/private/:userId", (request, response) => {
+    this.privateUsers.get("/:userId/following", (request, response) => {
       this.usersController.getFollowingByUser(request, response);
     });
 
-    this.users.get("/private/:userId", (request, response) => {
+    this.privateUsers.get("/:userId/followers", (request, response) => {
       this.usersController.getUserFollowers(request, response);
     });
   }
 
   getRoutes() {
     return this.users;
+  }
+
+  getPrivateRoutes() {
+    return this.privateUsers;
   }
 }
 
