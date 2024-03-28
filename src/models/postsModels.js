@@ -39,25 +39,25 @@ class PostsModel {
     }
   }
 
-  async likePost(postId, userId) {
+  async postAlreadyLiked(postId, userId) {
     try {
-      const alreadyLike = await this.connection("likes")
+      return await this.connection("likes")
         .where("postId", postId)
         .andWhere("userId", userId)
         .first();
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 
-      if (alreadyLike) {
-        return false;
-      }
-
+  async likePost(postId, userId) {
+    try {
       await this.connection.transaction(async (trx) => {
         await trx("likes").insert({
           userId,
           postId,
         });
         await trx("posts").where("id", postId).increment("likes", 1);
-
-        return true;
       });
     } catch (error) {
       throw new Error(error);
@@ -67,7 +67,10 @@ class PostsModel {
   async unlikePost(postId, userId) {
     try {
       await this.connection.transaction(async (trx) => {
-        await trx("likes").where("userId", userId).andWhere("postId", postId).delete();
+        await trx("likes")
+          .where("userId", userId)
+          .andWhere("postId", postId)
+          .delete();
         await trx("posts").where("id", postId).decrement("likes", 1);
       });
 
