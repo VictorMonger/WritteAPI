@@ -5,10 +5,13 @@ class FollowersController {
 
   async followUser(request, response) {
     try {
-      const { followerId } = request.params;
-      const { followedId } = request.body;
+      const { followedId } = request.params;
+      const { user } = request.headers;
 
-      await this.followersModel.followUser(followerId, followedId);
+      const tokenUserObject = JSON.parse(user);
+      const { id } = tokenUserObject;
+
+      await this.followersModel.followUser(followedId, id);
 
       return response
         .status(200)
@@ -21,10 +24,13 @@ class FollowersController {
 
   async unfollowUser(request, response) {
     try {
-      const { followerId } = request.params;
-      const { followedId } = request.body;
+      const { followedId } = request.params;
+      const { user } = request.headers;
 
-      await this.followersModel.unfollowUser(followerId, followedId);
+      const tokenUserObject = JSON.parse(user);
+      const { id } = tokenUserObject;
+
+      await this.followersModel.unfollowUser(followedId, id);
 
       return response
         .status(200)
@@ -33,9 +39,7 @@ class FollowersController {
       console.error(error);
       return response.status(500).json({ error: "Failed to unfollow user." });
     }
-  }
-
-  
+  }  
 }
 
 module.exports = FollowersController;
