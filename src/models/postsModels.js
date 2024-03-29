@@ -30,7 +30,7 @@ class PostsModel {
   async getPostInfo(postId) {
     try {
       return await this.connection("posts")
-        .select("users.UserName", "posts.content", "posts.likes")
+        .select("users.userName", "posts.content", "posts.likes")
         .innerJoin("users", "posts.userId", "users.id")
         .where("posts.id", postId)
         .first();

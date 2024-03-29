@@ -3,18 +3,18 @@ class FollowersModel {
     this.connection = connection;
   }
 
-  async followUser(followerId, followedId) {
+  async followUser(followedId, followerId) {
     try {
       return await this.connection("followers").insert({
-        followerId,
         followedId,
+        followerId,
       });
     } catch (error) {
       throw new Error(error);
     }
   }
 
-  async unfollowUser(followerId, followedId) {
+  async unfollowUser(followedId, followerId) {
     try {
       return await this.connection("followers")
         .where("followerId", followerId)
