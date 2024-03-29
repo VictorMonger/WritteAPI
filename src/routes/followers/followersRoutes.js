@@ -6,11 +6,11 @@ class FollowersRouter {
 
     this.followersController = followersController;
 
-    this.follow.post("/follow", (request, response) => {
+    this.follow.post("/follow/:followedId", (request, response) => {
       this.followersController.followUser(request, response);
     });
 
-    this.follow.delete("/unfollow", (request, response) => {
+    this.follow.delete("/unfollow/:followedId", (request, response) => {
       this.followersController.unfollowUser(request, response);
     });
   }
