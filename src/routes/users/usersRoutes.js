@@ -19,11 +19,15 @@ class UsersRouter {
       this.usersController.getAll(request, response);
     });
 
-    this.privateUsers.get("/:userId/following", (request, response) => {
+    this.privateUsers.get("/posts/:userId", (request, response) => {
+      this.usersController.getAllUserPosts(request, response);
+    });
+
+    this.privateUsers.get("/following", (request, response) => {
       this.usersController.getFollowingByUser(request, response);
     });
 
-    this.privateUsers.get("/:userId/followers", (request, response) => {
+    this.privateUsers.get("/followers", (request, response) => {
       this.usersController.getUserFollowers(request, response);
     });
   }
