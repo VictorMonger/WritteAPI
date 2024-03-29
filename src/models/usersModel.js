@@ -70,8 +70,8 @@ class UsersModel {
     try {
       return await this.connection("followers")
         .join("users", "followers.followedId", "users.id")
-        .where("followers.followedId", userId)
-        .select("users.*");
+        .where("followers.followerId", userId)
+        .select("users.userName");
     } catch (error) {
       throw new Error(error);
     }
@@ -81,8 +81,19 @@ class UsersModel {
     try {
       return await this.connection("followers")
         .join("users", "followers.followerId", "users.id")
-        .where("followers.followerId", userId)
-        .select("users.*");
+        .where("followers.followedId", userId)
+        .select("users.userName");
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getAllUserPosts(userId) {
+    try {
+      return await this.connection("posts")
+        .select("users.userName", "posts.content", "posts.created_at", "posts.likes")
+        .innerJoin("users", "posts.userId", "users.id")
+        .where("userId", userId);
     } catch (error) {
       throw new Error(error);
     }
