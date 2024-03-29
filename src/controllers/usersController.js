@@ -90,9 +90,12 @@ class UsersController {
 
   async getFollowingByUser(request, response) {
     try {
-      const { userId } = request.params;
+      const { user } = request.headers;
 
-      const followedUsers = await this.usersModel.getFollowingByUser(userId);
+      const tokenUserObject = JSON.parse(user);
+      const { id } = tokenUserObject;
+
+      const followedUsers = await this.usersModel.getFollowingByUser(id);
 
       return response.status(200).json(followedUsers);
     } catch (error) {
@@ -104,15 +107,32 @@ class UsersController {
 
   async getUserFollowers(request, response) {
     try {
-      const { userId } = request.params;
+      const { user } = request.headers;
 
-      const userFollowers = await this.usersModel.getUserFollowers(userId);
+      const tokenUserObject = JSON.parse(user);
+      const { id } = tokenUserObject;
+
+      const userFollowers = await this.usersModel.getUserFollowers(id);
 
       return response.status(200).json(userFollowers);
     } catch (error) {
       return response
         .status(500)
         .json({ error: "Failed to list following users." });
+    }
+  }
+
+  async getAllUserPosts(request, response) {
+    try {
+      const { userId } = request.params;
+
+      const allUserPosts = await this.usersModel.getAllUserPosts(userId);
+
+      return response.status(200).json(allUserPosts)
+    } catch (error) {
+      return response
+        .status(500)
+        .json({ error: "Failed to list user posts." });
     }
   }
 }
