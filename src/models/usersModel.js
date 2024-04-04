@@ -91,7 +91,12 @@ class UsersModel {
   async getAllUserPosts(userId) {
     try {
       return await this.connection("posts")
-        .select("users.userName", "posts.content", "posts.created_at", "posts.likes")
+        .select(
+          "users.userName",
+          "posts.content",
+          "posts.created_at",
+          "posts.likes"
+        )
         .innerJoin("users", "posts.userId", "users.id")
         .where("userId", userId);
     } catch (error) {
