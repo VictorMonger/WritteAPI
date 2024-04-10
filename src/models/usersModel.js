@@ -30,13 +30,7 @@ class UsersModel {
       const { userName, firstName, lastName, email, password } = user;
 
       return await this.connection("users")
-        .insert({
-          userName,
-          firstName,
-          lastName,
-          email,
-          password,
-        })
+        .insert(user)
         .returning("*");
     } catch (error) {
       throw new Error(error);
